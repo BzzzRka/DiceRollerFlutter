@@ -1,94 +1,78 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-
+import 'dart:math'; // для рандома
 
 void main() {
   runApp(MyApp());
-
 }
+// запускается
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
+
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        ),
-        home: MyHomePage(),
-      ),
+    // билдится виджет
+    return MaterialApp(
+      title: 'Roll',
+      theme: ThemeData.dark(), // Устанавливаем тёмную тему
+      home: MyHomePage(),
     );
   }
 }
 
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+} // изменяемый виджет
 
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
+
+
+class _MyHomePageState extends State<MyHomePage> {
+  // Все мои дайсы
+  final List<String> s = [
+    'assets/dice_1.png',
+    'assets/dice_2.png',
+    'assets/dice_3.png',
+    'assets/dice_4.png',
+    'assets/dice_5.png',
+    'assets/dice_6.png',
+  ];
+
+  // Запомним текущую ссылку
+  String imagik = 'assets/dice_1.png';
+  bool _isImageVisible = false;
+
+  // void change
+  void change1() {
+    setState(() {
+      // Генерация случайного индекса для списка изображений
+      final random = Random();
+      imagik = s[random.nextInt(s.length)];
+      _isImageVisible = true;
+    });
   }
-}
 
-class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var pair = appState.current;
-
     return Scaffold(
+      appBar: AppBar(
+        title: Text('MKN 2024'),
+      ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,  // ← Add this.
-          children: [
-            Text('A random AWESOME idea:'),
-            BigCard(pair: pair),
+          mainAxisAlignment: MainAxisAlignment.center, // центрируем
+          children: <Widget>[
+            if (_isImageVisible)
+              Image.asset(
+                imagik, // Изображение
+                width: 200.0,
+                height: 200.0,
+              ),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                appState.getNext();
-              },
-              child: Text('Next'),
+              onPressed: change1, // Смена изображения по нажатию кнопки
+              child: Text('Rolling'),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class BigCard extends StatelessWidget {
-  const BigCard({
-    super.key,
-    required this.pair,
-  });
-
-  final WordPair pair;
-
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-
-        // ↓ Make the following change.
-        child: Text(
-          pair.asLowerCase,
-          style: style,
-          semanticsLabel: "${pair.first} ${pair.second}",
         ),
       ),
     );
