@@ -39,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Запомним текущую ссылку
   String imagik = 'assets/dice_1.png';
+  String imagik1 = 'assets/dice_1.png';
   bool _isImageVisible = false;
 
   // void change
@@ -51,6 +52,20 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void change2() {
+    setState(() {
+      // Генерация случайного индекса для списка изображений
+      final random = Random();
+      imagik1 = s[random.nextInt(s.length)];
+      _isImageVisible = true;
+    });
+  }
+
+  void change() {
+    change1();
+    change2();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,15 +76,30 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center, // центрируем
           children: <Widget>[
+
             if (_isImageVisible)
-              Image.asset(
-                imagik, // Изображение
-                width: 200.0,
-                height: 200.0,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  imagik1, // Изображение
+                  width: 200.0,
+                  height: 200.0,
+                ),
               ),
+
+            if (_isImageVisible)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  imagik, // Изображение
+                  width: 200.0,
+                  height: 200.0,
+                ),
+              ),
+
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: change1, // Смена изображения по нажатию кнопки
+              onPressed: change, // Смена изображения по нажатию кнопки
               child: Text('Rolling'),
             ),
           ],

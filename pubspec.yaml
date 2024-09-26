@@ -23,3 +23,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+      - assets/dice_1.png
+      - assets/dice_2.png
+      - assets/dice_3.png
+      - assets/dice_4.png
+      - assets/dice_5.png
+      - assets/dice_6.png
